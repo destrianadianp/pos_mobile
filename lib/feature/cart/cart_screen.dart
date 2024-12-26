@@ -43,12 +43,18 @@ class _CartScreenState extends State<CartScreen> {
             backgroundColor: secondaryColor,
             leading: GestureDetector(
               child: IconButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                }, 
-                icon: const Icon(Icons.arrow_back_ios, size: 20,)),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 20,
+                  )),
             ),
-            title: const Text("Cart Screen", style: mRegular,),
+            title: const Text(
+              "Cart Screen",
+              style: mRegular,
+            ),
             shape: const Border(bottom: BorderSide(color: borderTransparent)),
           ),
           backgroundColor: secondaryColor,
@@ -57,7 +63,8 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -90,14 +97,17 @@ class _CartScreenState extends State<CartScreen> {
                     _buildBottomBar(totalPayment),
                   ],
                 )
-              :  Center(
-                child: Column(
+              : Center(
+                  child: Column(
                   children: [
-                    Image.asset('assets/images/ayam.png', width: 300, height: 300,),
+                    Image.asset(
+                      'assets/images/ayam.png',
+                      width: 300,
+                      height: 300,
+                    ),
                     const Text("Your Cart is Empty!"),
                   ],
-                )
-                ),
+                )),
         );
       },
     );
@@ -138,53 +148,56 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  
- Widget _buildBottomBar(double totalPayment) {
-  return Container(
-    color: secondaryColor,
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Total Pembayaran:', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('Rp ${totalPayment.toStringAsFixed(0)}', style: const TextStyle(fontWeight: FontWeight.bold)),
-          ],
-        ),
-        const SizedBox(height: 10),
-        CustomButton(
-          onPressed: () {
-            // Mengakses instance CartProvider
-            final cart = Provider.of<CartProvider>(context, listen: false);
+  Widget _buildBottomBar(double totalPayment) {
+    return Container(
+      color: secondaryColor,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Total Pembayaran:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('Rp ${totalPayment.toStringAsFixed(0)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          CustomButton(
+            onPressed: () {
+              // Mengakses instance CartProvider
+              final cart = Provider.of<CartProvider>(context, listen: false);
 
-            // Menambahkan transaksi ke TransactionProvider
-            final transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
-            final String currentDate = DateTime.now().toLocal().toString().substring(0, 16);
+              // Menambahkan transaksi ke TransactionProvider
+              final transactionProvider =
+                  Provider.of<TransactionProvider>(context, listen: false);
+              final String currentDate =
+                  DateTime.now().toLocal().toString().substring(0, 16);
 
-            transactionProvider.addTransaction(
-              Transaction(
-                date: currentDate,
-                address: location ?? 'Alamat tidak dipilih',
-                totalPrice: totalPayment,
-              ),
-            );
+              transactionProvider.addTransaction(
+                Transaction(
+                  date: currentDate,
+                  address: location ?? 'Alamat tidak dipilih',
+                  totalPrice: totalPayment,
+                ),
+              );
 
-            // Kosongkan keranjang setelah pemesanan
-            cart.clearCart();
+              // Kosongkan keranjang setelah pemesanan
+              cart.clearCart();
 
-            // Tampilkan pesan sukses
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Pesanan berhasil dibuat!")),
-            );
+              // Tampilkan pesan sukses
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Pesanan berhasil dibuat!")),
+              );
 
-            // Navigasi kembali
-            Navigator.pop(context);
-          },
-          child: const Text('Pesan Sekarang'),
-        ),
-      ],
-    ),
-  );
-}
+              // Navigasi kembali
+              Navigator.pop(context);
+            },
+            child: const Text('Pesan Sekarang'),
+          ),
+        ],
+      ),
+    );
+  }
 }

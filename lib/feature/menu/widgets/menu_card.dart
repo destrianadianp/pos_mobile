@@ -33,23 +33,21 @@ class ProductCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-ClipRRect(
-  borderRadius: BorderRadius.circular(10),
-  child: product.productImage.isNotEmpty
-      ? Image.memory(
-          base64Decode(product.productImage),
-          height: 80,
-          width: 80,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.image, size: 80, color: Colors.grey);
-          },
-        )
-      : const Icon(Icons.image, size: 80, color: Colors.grey),
-),
-
-
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: product.productImage.isNotEmpty
+                  ? Image.memory(
+                      base64Decode(product.productImage),
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image,
+                            size: 80, color: Colors.grey);
+                      },
+                    )
+                  : const Icon(Icons.image, size: 80, color: Colors.grey),
+            ),
             const SizedBox(width: 15),
             Expanded(
               child: Column(
@@ -65,7 +63,8 @@ ClipRRect(
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    CurrencyFormat.convertToIdr(product.price, 0), // Use formatted currency
+                    CurrencyFormat.convertToIdr(
+                        product.price, 0), // Use formatted currency
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -78,16 +77,19 @@ ClipRRect(
                     child: ElevatedButton(
                       onPressed: () {
                         if (isInCart) {
-                          cartProvider.remove(CartModel(
-                            product: product,
-                            quantity: 1,
-                          ));
+                          cartProvider.remove(
+                            CartModel(
+                              product: product,
+                              quantity: 1,
+                            ),
+                          );
                         } else {
                           cartProvider.addToCart(product.productId);
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isInCart ? Colors.red : Colors.orangeAccent,
+                        backgroundColor:
+                            isInCart ? Colors.red : Colors.orangeAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -108,7 +110,7 @@ ClipRRect(
               ),
             ),
           ],
-        ), 
+        ),
       ),
     );
   }

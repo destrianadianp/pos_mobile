@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../helper/currency_format.dart';
@@ -28,8 +30,8 @@ class ProductListView extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    item.product.productImage,
+                  child: Image.memory(
+                    base64Decode(item.product.productImage),
                     height: 70,
                     width: 70,
                     fit: BoxFit.cover,

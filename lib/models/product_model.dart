@@ -35,4 +35,9 @@ class ProductModel {
       userId: map['userId'] ?? ''
     );
   }
+
+  @override
+  String toString() {
+    return 'ProductModel{productId: $productId, productName: $productName, productImage: $productImage, price: $price, category: $category, userId: $userId}';
+  }
 }

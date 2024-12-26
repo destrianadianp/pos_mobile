@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class RecomendedCard extends StatelessWidget {
@@ -47,8 +49,14 @@ class RecomendedCard extends StatelessWidget {
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
-                child: Image.network(
+                /* child: Image.network(
                   imageUrl ?? 'https://via.placeholder.com/150',
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ), */
+                child: Image.memory(
+                  base64Decode(imageUrl!),
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.cover,

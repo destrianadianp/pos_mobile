@@ -25,7 +25,6 @@ class CartProvider extends ChangeNotifier {
           .where('userId', isEqualTo: userId)
           .get();
 
-      log('fetchProducts: $snapshot');
       _products.clear();
       _products.addAll(snapshot.docs.map((doc) {
         final data = doc.data();
@@ -40,6 +39,10 @@ class CartProvider extends ChangeNotifier {
         );
       }).toList());
 
+      for (final item in _products) {
+        debugPrint("Product ${item.toString()}");
+      }
+
       notifyListeners();
     } catch (e) {
       debugPrint("Error fetching products: $e");
@@ -47,39 +50,38 @@ class CartProvider extends ChangeNotifier {
   }
 
   // Add product to cart
-Future<void> addToCart(String productId) async {
-  try {
-    // Cari produk berdasarkan productId
-    final product = _products.firstWhereOrNull((item) => item.productId == productId);
+  Future<void> addToCart(String productId) async {
+    try {
+      // Cari produk berdasarkan productId
+      final product =
+          _products.firstWhereOrNull((item) => item.productId == productId);
 
-    if (product == null) {
-      // Jika produk tidak ditemukan
-      debugPrint("Product with ID $productId not found");
-      return;
+      if (product == null) {
+        // Jika produk tidak ditemukan
+        debugPrint("Product with ID $productId not found");
+        return;
+      }
+
+      // Cek apakah produk sudah ada di keranjang
+      final existingCartItem = _cartItems.firstWhereOrNull(
+          (cartItem) => cartItem.product.productId == productId);
+
+      if (existingCartItem != null) {
+        // Jika produk sudah ada, tambahkan jumlahnya
+        existingCartItem.quantity += 1;
+      } else {
+        // Jika produk belum ada, tambahkan ke keranjang
+        _cartItems.add(CartModel(product: product, quantity: 1));
+      }
+
+      // Notifikasi perubahan pada UI
+      notifyListeners();
+    } catch (e, stackTrace) {
+      // Tangani kesalahan yang tidak terduga
+      debugPrint("Error adding to cart: $e");
+      debugPrint("Stack Trace: $stackTrace");
     }
-
-    // Cek apakah produk sudah ada di keranjang
-    final existingCartItem = _cartItems.firstWhereOrNull(
-        (cartItem) => cartItem.product.productId == productId);
-
-    if (existingCartItem != null) {
-      // Jika produk sudah ada, tambahkan jumlahnya
-      existingCartItem.quantity += 1;
-    } else {
-      // Jika produk belum ada, tambahkan ke keranjang
-      _cartItems.add(CartModel(product: product, quantity: 1));
-    }
-
-    // Notifikasi perubahan pada UI
-    notifyListeners();
-  } catch (e, stackTrace) {
-    // Tangani kesalahan yang tidak terduga
-    debugPrint("Error adding to cart: $e");
-    debugPrint("Stack Trace: $stackTrace");
   }
-}
-
-
 
   void remove(CartModel item) {
     final removedItem = _cartItems.firstWhereOrNull(
